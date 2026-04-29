@@ -22,10 +22,10 @@ public class S3Config {
     @Value("${aws.region}")
     private String region;
 
-    @Value("${aws.access-key-id}")
+    @Value("${aws.access}")
     private String accessKeyId;
 
-    @Value("${aws.secret-access-key}")
+    @Value("${aws.secret}")
     private String secretAccessKey;
 
     /**
