@@ -26,7 +26,7 @@ import java.util.Map;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api/files")
+@RequestMapping("/api/file")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:4200", "http://localhost:5173"})
 @Tag(name = "File Operations", description = "API for file import/export operations")
 public class FileUploadController {
@@ -44,8 +44,7 @@ public class FileUploadController {
      * @param file the multipart file to upload
      * @return ResponseEntity containing the file metadata or error details
      */
-    @PostMapping(value = "/import", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "Import a file", description = "Upload a file to the storage system and save its metadata")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "File imported successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid file or request"),
@@ -77,13 +76,13 @@ public class FileUploadController {
             error.put("cause", e.getCause() != null ? e.getCause().getClass().getSimpleName() : "Unknown");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.toString());
         } catch (IOException e) {
-            log.error("IO error during file import: {}", file.getOriginalFilename(), e);
+            log.error("IO error during file upload: {}", file.getOriginalFilename(), e);
             Map<String, String> error = new HashMap<>();
             error.put("error", "IO error");
             error.put("message", e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.toString());
         } catch (Exception e) {
-            log.error("Unexpected error during file import: {}", file.getOriginalFilename(), e);
+            log.error("Unexpected error during file upload: {}", file.getOriginalFilename(), e);
             Map<String, String> error = new HashMap<>();
             error.put("error", "Unexpected error");
             error.put("message", e.getMessage());
@@ -91,7 +90,7 @@ public class FileUploadController {
         }
     }
 
-    @GetMapping("/download/{fileName}")
+    @GetMapping("/{fileName}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable String fileName) {
         byte[] fileContent = s3Service.downloadFile(fileName);
 

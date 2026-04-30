@@ -62,7 +62,6 @@ public class S3Service {
                 .bucket(bucketName)
                 .key(multipartFile.getOriginalFilename())
                 .build(), RequestBody.fromBytes(multipartFile.getBytes()));
-
     }
 
 
